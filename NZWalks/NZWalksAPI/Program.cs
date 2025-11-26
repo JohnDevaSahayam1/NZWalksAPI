@@ -11,8 +11,20 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.FileProviders;
+using Serilog;
+using NZWalksAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var Logger=new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/NZWalksAPI_log.Txt",rollingInterval:RollingInterval.Day)
+    .MinimumLevel.Information()
+    .CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(Logger);
+
 
 // Add services to the container.
 
@@ -128,6 +140,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

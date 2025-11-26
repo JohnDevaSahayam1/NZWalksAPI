@@ -29,10 +29,11 @@ namespace NZWalksAPI.Controllers
 
         // GET: api/Regions/GetAllRegions
         [HttpGet("GetAllRegions")]
-        [Authorize(Roles ="User")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
             var regions = await regionRepository.GetAllRegionsAsync(filterOn, filterQuery);
+
 
             var regionDtos = mapper.Map<List<Regiondto>>(regions);
 
