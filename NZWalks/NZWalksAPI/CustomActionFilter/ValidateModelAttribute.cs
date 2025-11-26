@@ -2,7 +2,7 @@
 
 namespace NZWalksAPI.CustomActionFilter
 {
-    public class ValidateModelAttribute:ActionFilterAttribute
+    public class ValidateModelAttribute : ActionFilterAttribute
     {
         override public void OnActionExecuting(ActionExecutingContext context)
         {

@@ -13,7 +13,7 @@ namespace NZWalksAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   
     public class RegionsController : ControllerBase
     {
         private readonly NZWalkDbContext _dbContext;
@@ -29,6 +29,7 @@ namespace NZWalksAPI.Controllers
 
         // GET: api/Regions/GetAllRegions
         [HttpGet("GetAllRegions")]
+        [Authorize(Roles ="User")]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
             var regions = await regionRepository.GetAllRegionsAsync(filterOn, filterQuery);
@@ -42,6 +43,7 @@ namespace NZWalksAPI.Controllers
 
         // GET: api/Regions/GetRegionById/{id}
         [HttpGet("GetRegionById/{id:guid}")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var regionDomain = await regionRepository.GetRegionByIdAsync(id);
@@ -56,6 +58,7 @@ namespace NZWalksAPI.Controllers
             //    Name = regionDomain.Name,
             //    RegionImageUrl = regionDomain.RegionImageUrl
             //};
+
           var regionDto= mapper.Map<Regiondto>(regionDomain);
             return Ok(regionDto);
         }
@@ -63,6 +66,7 @@ namespace NZWalksAPI.Controllers
 
         // POST: api/Regions/CreateRegion
         [HttpPost("CreateRegion")]
+        [Authorize(Roles = "Admin")]
         [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddRegionRequestdto addRegionRequestdto)
         {
@@ -90,6 +94,7 @@ namespace NZWalksAPI.Controllers
 
         // PUT: api/Regions/UpdateRegion/{id}
         [HttpPut("UpdateRegion/{id:guid}")]
+        [Authorize(Roles = "Admin")]
         [ValidateModel]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestdto updateRegionRequestdto)
         {
@@ -122,6 +127,7 @@ namespace NZWalksAPI.Controllers
 
         // DELETE: api/Regions/DeleteRegion/{id}
         [HttpDelete("DeleteRegion/{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var regionDomain = await regionRepository.DeleteRegionAsync(id);
